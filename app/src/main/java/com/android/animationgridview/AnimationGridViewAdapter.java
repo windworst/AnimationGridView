@@ -74,7 +74,6 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
     //设置animation
     private void setAnimation(View view, int position) {
         if (position < mIndex || 0 == mDirection) return; //mIndex为修改点, 修改点之前项不设置动画
-        if (position == mIndex && mDirection > 0) return; //增加项时, 为修改点项, 不设置动画
         int[] deltaXY = getDeltaPositionXY(view, position - mDirection, position);
         view.setAnimation(moveAnimation(deltaXY[0], deltaXY[1]));
     }

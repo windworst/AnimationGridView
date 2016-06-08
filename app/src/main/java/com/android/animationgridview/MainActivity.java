@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 list.add(position, "" + (++mIndex));
-                animationGridViewAdapter.addItemAnimation(position);
+                animationGridViewAdapter.addItemAnimation(position + 1);
                 return false;
             }
         });
