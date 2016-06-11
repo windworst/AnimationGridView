@@ -37,7 +37,6 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
     protected Animation moveAnimation(int deltaX, int deltaY) {
         Animation animation = new TranslateAnimation(deltaX, 0, deltaY, 0);
         animation.setDuration(300);
-        animation.startNow();
         return animation;
     }
 
@@ -75,7 +74,7 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
     private void setAnimation(View view, int position) {
         if (position < mIndex || 0 == mDirection) return; //mIndex为修改点, 修改点之前项不设置动画
         int[] deltaXY = getDeltaPositionXY(view, position - mDirection, position);
-        view.setAnimation(moveAnimation(deltaXY[0], deltaXY[1]));
+        view.startAnimation(moveAnimation(deltaXY[0], deltaXY[1]));
     }
 
     protected abstract View getConvertView(int position, View convertView, ViewGroup parent);
