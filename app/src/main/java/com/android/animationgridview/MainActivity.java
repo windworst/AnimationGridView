@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onAnimationEnd(Animation animation) {
                         isLock = false;
                         list.remove(position);
-                        animationGridViewAdapter.removeItemAnimation(position).commit();
+                        animationGridViewAdapter.removeItem(0).removeItem(0).commit();
                     }
 
                     @Override
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 list.add(position, "" + (++mIndex));
-                animationGridViewAdapter.insertItemAnimation(position).commit();
+                animationGridViewAdapter.insertItem(position).commit();
                 gridView.post(new Runnable() {
                     @Override
                     public void run() {
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 list.add(0, list.get(list.size() - 1));
                 list.remove(list.size() - 1);
-                animationGridViewAdapter.insertItemAnimation(0).commit();
+                animationGridViewAdapter.insertItem(0).commit();
                 gridView.post(new Runnable() {
                     @Override
                     public void run() {

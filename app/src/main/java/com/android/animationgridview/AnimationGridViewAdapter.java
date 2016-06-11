@@ -27,14 +27,17 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
     }
 
     //在index处插入新项后, 设置动画
-    public AnimationGridViewAdapter insertItemAnimation(int index) {
-        mOffsetMap.put(index + 1, 1); //记录插入点, 插入动画只影响插入点后面元素
+    public AnimationGridViewAdapter insertItem(int index) {
+        ++index; //记录插入点, 插入动画只影响插入点后面元素
+        if (!mOffsetMap.containsKey(index)) mOffsetMap.put(index, 0);
+        mOffsetMap.put(index, 1 + mOffsetMap.get(index));
         return this;
     }
 
     //在index处移除新项, 设置动画
-    public AnimationGridViewAdapter removeItemAnimation(int index) {
-        mOffsetMap.put(index, -1); //记录删除点
+    public AnimationGridViewAdapter removeItem(int index) {
+        if (!mOffsetMap.containsKey(index)) mOffsetMap.put(index, 0);
+        mOffsetMap.put(index, -1 + mOffsetMap.get(index)); //记录删除点
         return this;
     }
 
