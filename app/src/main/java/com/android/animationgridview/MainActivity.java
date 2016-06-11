@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onAnimationEnd(Animation animation) {
                         isLock = false;
                         list.remove(position);
-                        animationGridViewAdapter.removeItemAnimation(position);
+                        animationGridViewAdapter.removeItemAnimation(position).commit();
                     }
 
                     @Override
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 list.add(position, "" + (++mIndex));
-                animationGridViewAdapter.addItemAnimation(position + 1);
+                animationGridViewAdapter.insertItemAnimation(position).commit();
                 gridView.post(new Runnable() {
                     @Override
                     public void run() {
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                                 selectView.startAnimation(getAnimation());
                                 selectView.setVisibility(View.VISIBLE);
                             }
-                        }, 300);
+                        }, 500);
                     }
                 });
                 return false;
@@ -117,6 +118,27 @@ public class MainActivity extends AppCompatActivity {
                         View selectView = gridView.getChildAt(gridView.getChildCount() - 1);
                         if (null == selectView) return;
                         selectView.startAnimation(getAnimation());
+                    }
+                });
+            }
+        });
+        findViewById(R.id.buttonCircle).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                list.add(0, list.get(list.size() - 1));
+                list.remove(list.size() - 1);
+                animationGridViewAdapter.insertItemAnimation(0).commit();
+                gridView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        View view = gridView.getChildAt(0);
+                        int position = list.size() - 1;
+                        Animation animation = new TranslateAnimation(
+                                (position % gridView.getNumColumns()) * (view.getMeasuredWidth()) - view.getLeft(), 0,
+                                (position / gridView.getNumColumns()) * (view.getMeasuredHeight()) - view.getTop(), 0);
+                        animation.setDuration(500);
+                        gridView.getChildAt(0).startAnimation(animation);
                     }
                 });
             }
