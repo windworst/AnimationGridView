@@ -1,1 +1,6 @@
 /build
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/gradle.xml
+/.idea/vcs.xml
+/.idea/misc.xml

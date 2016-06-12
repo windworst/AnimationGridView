@@ -7,13 +7,14 @@ import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class AnimationGridViewAdapter extends BaseAdapter {
     private GridView mGridView;
     private int mItemOffset = 0;
-    private Map<Integer, Integer> mOffsetMap = new HashMap<>();
+    private Map<Integer, Integer> mOffsetMap = new TreeMap<>();
 
     public AnimationGridViewAdapter(GridView gridView) {
         mGridView = gridView;
@@ -43,6 +44,26 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
 
     //执行动画
     public void commit() {
+        //将相邻的插入删除动画合并
+        //若有相邻的插入删除动画, 计算这些相邻的改变项最终总共是增加还是减少
+        //若增加则将总共改变值设置给这些相邻项的最后一项, 若减少则设置给这些相邻项的第一项
+        {
+            Integer first = null, last = null, sum = 0;
+            Iterator<Map.Entry<Integer, Integer>> it = mOffsetMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Integer, Integer> entry = it.next();
+                if (last != null && entry.getKey() - 1 == last) {
+                    sum += entry.getValue();
+                } else {
+                    if (sum != 0) mOffsetMap.put(sum > 0 ? last : first, sum);
+                    sum = entry.getValue();
+                    first = entry.getKey();
+                }
+                last = entry.getKey();
+                it.remove();
+            }
+            if (sum != 0) mOffsetMap.put(sum > 0 ? last : first, sum);
+        }
         mItemOffset = 0;
         super.notifyDataSetChanged();
         mGridView.post(new Runnable() {// notifyDataSetChanged 完成后执行
