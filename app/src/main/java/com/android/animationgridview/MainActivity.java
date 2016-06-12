@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onAnimationEnd(Animation animation) {
                         isLock = false;
                         list.remove(position);
-                        animationGridViewAdapter.removeItem(0).commit();
+                        animationGridViewAdapter.removeItem(position).commit();
                     }
 
                     @Override
