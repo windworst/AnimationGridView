@@ -26,7 +26,9 @@
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:numColumns="4">
+        android:horizontalSpacing="10dp"
+        android:numColumns="4"
+        android:verticalSpacing="10dp">
 
     </GridView>
 </LinearLayout>

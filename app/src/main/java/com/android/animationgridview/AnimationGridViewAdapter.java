@@ -1,5 +1,6 @@
 package com.android.animationgridview;
 
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -99,12 +100,17 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
 
     //根据position拿到相应view的x,y坐标
     private int[] getPositionXY(View view, int position) {
-        if (position < 0 || null == view) {
+        if (position == 0 || null == view) {
             return new int[]{0, 0};
         }
+        int horizontalSpacing = 0, verticalSpacing = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            horizontalSpacing = mGridView.getHorizontalSpacing();
+            verticalSpacing = mGridView.getHorizontalSpacing();
+        }
         return new int[]{
-                (position % mGridView.getNumColumns()) * (view.getMeasuredWidth()),
-                (position / mGridView.getNumColumns()) * (view.getMeasuredHeight())
+                (position % mGridView.getNumColumns()) * (view.getMeasuredWidth() + horizontalSpacing),
+                (position / mGridView.getNumColumns()) * (view.getMeasuredHeight() + verticalSpacing)
         };
     }
 
