@@ -14,7 +14,9 @@ import java.util.TreeMap;
 public abstract class AnimationGridViewAdapter extends BaseAdapter {
     private GridView mGridView;
     private int mItemOffset = 0;
-    private Map<Integer, Integer> mOffsetMap = new TreeMap<>();
+
+    //这里使用到TreeMap的有序迭代特性， 故使用TreeMap作为引用而非Map接口
+    private TreeMap<Integer, Integer> mOffsetMap = new TreeMap<>();
 
     public AnimationGridViewAdapter(GridView gridView) {
         mGridView = gridView;
@@ -30,14 +32,18 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
     //在index处插入新项后, 设置动画
     public AnimationGridViewAdapter insertItem(int index) {
         ++index; //记录插入点, 插入动画只影响插入点后面元素
-        if (!mOffsetMap.containsKey(index)) mOffsetMap.put(index, 0);
+        if (!mOffsetMap.containsKey(index)) {
+            mOffsetMap.put(index, 0);
+        }
         mOffsetMap.put(index, 1 + mOffsetMap.get(index));
         return this;
     }
 
     //在index处移除新项, 设置动画
     public AnimationGridViewAdapter removeItem(int index) {
-        if (!mOffsetMap.containsKey(index)) mOffsetMap.put(index, 0);
+        if (!mOffsetMap.containsKey(index)) {
+            mOffsetMap.put(index, 0);
+        }
         mOffsetMap.put(index, -1 + mOffsetMap.get(index)); //记录删除点
         return this;
     }
@@ -55,14 +61,18 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
                 if (last != null && entry.getKey() - 1 == last) {
                     sum += entry.getValue();
                 } else {
-                    if (sum != 0) mOffsetMap.put(sum > 0 ? last : first, sum);
+                    if (sum != 0) {
+                        mOffsetMap.put(sum > 0 ? last : first, sum);
+                    }
                     sum = entry.getValue();
                     first = entry.getKey();
                 }
                 last = entry.getKey();
                 it.remove();
             }
-            if (sum != 0) mOffsetMap.put(sum > 0 ? last : first, sum);
+            if (sum != 0) {
+                mOffsetMap.put(sum > 0 ? last : first, sum);
+            }
         }
         mItemOffset = 0;
         super.notifyDataSetChanged();
@@ -89,7 +99,9 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
 
     //根据position拿到相应view的x,y坐标
     private int[] getPositionXY(View view, int position) {
-        if (position < 0 || null == view) return new int[]{0, 0};
+        if (position < 0 || null == view) {
+            return new int[]{0, 0};
+        }
         return new int[]{
                 (position % mGridView.getNumColumns()) * (view.getMeasuredWidth()),
                 (position / mGridView.getNumColumns()) * (view.getMeasuredHeight())
@@ -102,7 +114,9 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
             mItemOffset += mOffsetMap.get(position);
             mOffsetMap.remove(position);
         }
-        if (0 == mItemOffset) return;
+        if (0 == mItemOffset) {
+            return;
+        }
         int[] src = getPositionXY(view, position - mItemOffset);
         int[] dst = getPositionXY(view, position);
         view.startAnimation(moveAnimation(src[0] - dst[0], src[1] - dst[1]));
