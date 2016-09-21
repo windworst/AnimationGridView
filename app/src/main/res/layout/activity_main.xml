@@ -28,7 +28,7 @@
         android:layout_height="100dp"
         android:horizontalSpacing="10dp"
         android:numColumns="4"
-        android:verticalSpacing="10dp">
+        android:verticalSpacing="20dp">
 
     </GridView>
 </LinearLayout>

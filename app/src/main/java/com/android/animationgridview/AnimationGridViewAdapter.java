@@ -106,7 +106,7 @@ public abstract class AnimationGridViewAdapter extends BaseAdapter {
         int horizontalSpacing = 0, verticalSpacing = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             horizontalSpacing = mGridView.getHorizontalSpacing();
-            verticalSpacing = mGridView.getHorizontalSpacing();
+            verticalSpacing = mGridView.getVerticalSpacing();
         }
         return new int[]{
                 (position % mGridView.getNumColumns()) * (view.getMeasuredWidth() + horizontalSpacing),
